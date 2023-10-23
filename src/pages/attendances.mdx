@@ -1,0 +1,308 @@
+export const description =
+  'On this page, we’ll dive into the different attendance endpoints you can use to manage attendances programmatically.'
+
+# Attendances
+
+Users who submit an attendance. {{ className: 'lead' }}
+
+## The attendance model
+
+The attendance model contains all the information about your attendances.
+
+### Properties
+
+<Properties>
+  <Property name="_id" type="string">
+    Unique identifier for the attendance.
+  </Property>
+  <Property name="user" type="string">
+    The user ID who submitted the attendance.
+  </Property>
+  <Property name="group" type="string">
+    The group ID where attendance belongs.
+  </Property>
+  <Property name="photo" type="string">
+    The photo for the attendance.
+  </Property>
+  <Property name="date" type="date">
+    Date of when attendance created
+  </Property>
+  <Property name="tagLocation" type="string">
+    Unique identifier for the user associated with the attendance.
+  </Property>
+  <Property name="location" type="object">
+    The location for the attendance.
+  </Property>
+  <Property name="location.name" type="string">
+    The name of the location ror the attendance.
+  </Property>
+  <Property name="location.latitude" type="string">
+    The latitude location for the attendance.
+  </Property>
+  <Property name="location.longitude" type="string">
+    The longitude location for the attendance.
+  </Property>
+</Properties>
+
+---
+
+## List all attendances {{ tag: 'GET', label: '/attendances' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a paginated list of all your attendances. By default, a maximum of ten attendances are shown per page.
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="limit" type="integer">
+        Limit the number of attendances returned.
+      </Property>
+      <Property name="page" type="integer">
+        Page of attendances returned.
+      </Property>
+      <Property name="startDate" type="date">
+        Filter attendances date by startDate. Format: "YYYY-MM-DD".
+      </Property>
+      <Property name="endDate" type="date">
+        Filter attendances date by endDate. Format: "YYYY-MM-DD".
+      </Property>
+      <Property name="userId" type="array">
+        Filter by one or more user ID. \
+        Example: "xgQQXg3hrtjh7AvZ,wqAAgX53SoWtjh7ABa" **(Seperated with comma)**.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/attendances">
+
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+    const token = 'YOUR_TOKEN';
+
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      params: {
+        limit: 8,
+        page: 1,
+        startDate: "2023-02-20",
+        endDate: "2024-10-20",
+        userId: "xgQQXg3hrtjh7AvZ,wqAAgX53SoWtjh7ABa"
+      },
+    };
+
+    const response = await axios.get(`${apiUrl}/attendances`, config);
+
+    console.log(response.data);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "status": "success",
+      "results": 8,
+      "page": 1,
+      "data": [
+        {
+          "_id": "WAz8eIbvDR60rouK",
+          "user": "xgQQXg3hrtjh7AvZ",
+          "group": "l7cGNIBKZiNJ6wqF",
+          "photo": "https://imageurl.com",
+          "tagLocation": "Rumah 1",
+          "location": {
+            "name": "Jalan Kebangsaan Timur",
+            "latitude": "10023242",
+            "longitude": "-1035353"
+          },
+          "date": "2023-10-23T10:39:58.606Z"
+        },
+        {
+          "_id": "hSIhXBhNe8X1d8Et"
+          // ...
+        }
+      ]
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create a attendance {{ tag: 'POST', label: '/attendances' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to add a new attendance to your attendance list.
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="user" type="string">
+        The user ID who submitted the attendance.
+      </Property>
+      <Property name="group" type="string">
+        The group ID where attendance belongs.
+      </Property>
+      <Property name="photo" type="string">
+        The photo for the attendance.
+      </Property>
+      <Property name="tagLocation" type="string">
+        Unique identifier for the user associated with the attendance.
+      </Property>
+      <Property name="location" type="object">
+        The location for the attendance.
+      </Property>
+      <Property name="location.name" type="string">
+        The name of the location ror the attendance.
+      </Property>
+      <Property name="location.latitude" type="string">
+        The latitude location for the attendance.
+      </Property>
+      <Property name="location.longitude" type="string">
+        The longitude location for the attendance.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/attendances">
+
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+
+    const payload = {
+      "user": "xgQQXg3hrtjh7AvZ",
+      "group": "l7cGNIBKZiNJ6wqF",
+      "photo": "https://imageurl.com",
+      "tagLocation": "Rumah 1",
+      "location": {
+        "name": "Jalan Kebangsaan Timur",
+        "latitude": "10023242",
+        "longitude": "-1035353"
+      }
+    }
+
+    const response = await axios.post(`${apiUrl}/attendances`, payload);
+
+    console.log(response.data);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "status": "success",
+      "data": {
+        "_id": "WAz8eIbvDR60rouK",
+        "user": "xgQQXg3hrtjh7AvZ",
+        "group": "l7cGNIBKZiNJ6wqF",
+        "photo": "https://imageurl.com",
+        "tagLocation": "Rumah 1",
+        "location": {
+          "name": "Jalan Kebangsaan Timur",
+          "latitude": "10023242",
+          "longitude": "-1035353"
+        },
+        "date": "2023-10-23T10:39:58.606Z"
+      }
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Retrieve a attendance {{ tag: 'GET', label: '/attendances/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a attendance by providing their attendance ID
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/attendances/WAz8eIbvDR60rouK">
+
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+
+    const id = 'WAz8eIbvDR60rouK';
+
+    const response = await axios.get(`${apiUrl}/attendances/${id}`);
+
+    console.log(response.data);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "status": "success",
+      "data": {
+        "_id": "WAz8eIbvDR60rouK",
+        "user": "xgQQXg3hrtjh7AvZ",
+        "group": "l7cGNIBKZiNJ6wqF",
+        "photo": "https://imageurl.com",
+        "tagLocation": "Rumah 1",
+        "location": {
+          "name": "Jalan Kebangsaan Timur",
+          "latitude": "10023242",
+          "longitude": "-1035353"
+        },
+        "date": "2023-10-23T10:39:58.606Z"
+      }
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Delete a attendance {{ tag: 'DELETE', label: '/attendances/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to delete attendances from your attendance list in WhatsApp.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="DELETE" label="/attendances/WAz8eIbvDR60rouK">
+
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+
+    const id = 'WAz8eIbvDR60rouK';
+
+    const response = await axios.delete(`${apiUrl}/attendances/${id}`);
+
+    console.log(response.data);
+    ```
+    </CodeGroup>
+    ```json {{ title: 'Response' }}
+    // No response
+    ```
+
+  </Col>
+</Row>

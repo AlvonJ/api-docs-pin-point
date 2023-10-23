@@ -1,0 +1,331 @@
+export const description =
+  'On this page, we’ll dive into the different user endpoints you can use to manage users programmatically.'
+
+# Users
+
+The Users API provides endpoints for managing users in WhatsApp programmatically. {{ className: 'lead' }}
+
+## The user model
+
+The user model includes information about users, such as their name, phone number, email, and role.
+
+### Properties
+
+<Properties>
+  <Property name="_id" type="string">
+    Unique identifier for the user.
+  </Property>
+  <Property name="email" type="string">
+    The email for the user.
+  </Property>
+  <Property name="username" type="string">
+    The username for the user.
+  </Property>
+  <Property name="phone" type="string">
+    The phone number for the user.
+  </Property>
+  <Property name="password" type="string">
+    The password for the user.
+  </Property>
+  <Property name="photo" type="string">
+    The photo for the user.
+  </Property>
+  <Property name="role" type="string">
+    The role for the user.
+  </Property>
+</Properties>
+
+---
+
+## List all users {{ tag: 'GET', label: '/users' }}
+
+<Row>
+  <Col>
+
+    Retrieve a paginated list of users. By default, it returns up to 10 users per page.
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="limit" type="integer">
+        Limit the number of users returned.
+      </Property>
+      <Property name="page" type="integer">
+        Page of users returned.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/users">
+
+
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+    const token = 'YOUR_TOKEN';
+
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      params: {
+        limit: 8,
+        page: 1,
+      },
+    };
+
+    const response = await axios.get(`${apiUrl}/users`, config);
+
+    console.log(response.data);
+    ```
+
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "status": "success",
+      "results": 8,
+      "page": 1,
+      "data": [
+        {
+          "_id": "652608bd60bb49fe10c7b719",
+          "username": "AlvonJ",
+          "email": "alvonj@gmail.com",
+          "phone": "08232321312",
+          "photo": null,
+          "role": "user",
+        },
+        {
+          "_id": "652608bd60bb49fe10c7b720"
+          // ...
+        }
+      ]
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create a user {{ tag: 'POST', label: '/users' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to add a new user to your user list in WhatsApp. To add a user, you must provide their WhatsApp name and phone number.
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="email" type="string">
+        The email for the user.
+      </Property>
+      <Property name="username" type="string">
+        The username for the user.
+      </Property>
+      <Property name="phone" type="string">
+        The phone number for the user.
+      </Property>
+      <Property name="password" type="string">
+        The password for the user.
+      </Property>
+    </Properties>
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="photo" type="string">
+        The photo for the user.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/users">
+
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+
+    const payload = {
+      "username": "AlvonJ",
+      "email": "alvonj@gmail.com",
+      "phone": "08232321312",
+      "password": "12345678",
+    };
+
+
+    const response = await axios.post(`${apiUrl}/users`, payload);
+
+    console.log(response.data);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "status": "success",
+      "data": {
+        "_id": "652608bd60bb49fe10c7b719",
+        "username": "AlvonJ",
+        "email": "alvonj@gmail.com",
+        "phone": "08232321312",
+        "photo": null,
+        "role": "user",
+      }
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Retrieve a user {{ tag: 'GET', label: '/users/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a user by providing their WhatsApp id. Refer to [the list](#the-user-model) at the top of this page to see which properties are included with user objects.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/users/652608bd60bb49fe10c7b719">
+
+
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+
+    const id = '652608bd60bb49fe10c7b719';
+
+    const response = await axios.get(`${apiUrl}/users/${id}`);
+
+    console.log(response.data);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "status": "success",
+      "data": {
+        "_id": "652608bd60bb49fe10c7b719",
+        "username": "AlvonJ",
+        "email": "alvonj@gmail.com",
+        "phone": "08232321312",
+        "photo": null,
+        "role": "user",
+      }
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Update a user {{ tag: 'PATCH', label: '/users/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to perform an update on a user. Currently, you can update `username`, `phone`, `photo`, `password` attribute on user.
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="username" type="string">
+        The username for the user.
+      </Property>
+      <Property name="phone" type="string">
+        The phone number for the user.
+      </Property>
+      <Property name="photo" type="string">
+        The photo URL for the user.
+      </Property>
+      <Property name="password" type="string">
+        The password for the user.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="PATCH" label="/users/652608bd60bb49fe10c7b719">
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+
+    const id = '652608bd60bb49fe10c7b719'
+
+    const payload = {
+      "username": "AlvonJovanus",
+      "phone": "082323213123",
+    };
+
+    const response = await axios.patch(`${apiUrl}/users/${id}`, payload);
+
+    console.log(response.data);
+    ```
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "status": "success",
+      "data": {
+        "_id": "652608bd60bb49fe10c7b719",
+        "username": "AlvonJovanus",
+        "email": "alvonj@gmail.com",
+        "phone": "082323213123",
+        "photo": null,
+        "role": "user",
+      }
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Delete a user {{ tag: 'DELETE', label: '/users/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to delete users from your user list in WhatsApp.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="DELETE" label="/users/WAz8eIbvDR60rouK">
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+
+    const id = 'WAz8eIbvDR60rouK';
+
+    const response = await axios.delete(`${apiUrl}/users/${id}`);
+
+    console.log(response.data);
+    ```
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    // No response
+    ```
+
+  </Col>
+</Row>

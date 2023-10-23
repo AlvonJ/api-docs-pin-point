@@ -1,0 +1,362 @@
+export const description =
+  'On this page, we’ll dive into the different group endpoints you can use to manage groups programmatically.'
+
+# Groups
+
+Groups are collection of two or more users who can communicate with each other in a shared chat space in WhatsApp. On this page, we'll dive into the different group endpoints you can use to manage groups programmatically. We'll look at how to query, create, update, and delete groups. {{ className: 'lead' }}
+
+## The group model
+
+The group model contains essential information about your groups, including group members, name, admin, and tagLocation.
+
+### Properties
+
+<Properties>
+  <Property name="_id" type="string">
+    Unique identifier for the group.
+  </Property>
+  <Property name="name" type="string">
+    Unique name for the group.
+  </Property>
+  <Property name="admin" type="string">
+    Admin user ID for the group.
+  </Property>
+  <Property name="tagLocation" type="array of strings">
+    An array of tag locations associated with the group.
+  </Property>
+  <Property name="member" type="array of strings">
+    An array of user IDs that are members of the group.
+  </Property>
+  <Property name="invitations" type="array of objects">
+    List invitations to the group
+  </Property>
+  <Property name="invitations.invitedUser" type="string">
+    Invited User ID
+  </Property>
+  <Property name="invitations.status" type="string">
+    Status of invitation (pending / accepted / declined)
+  </Property>
+</Properties>
+
+---
+
+## List all groups {{ tag: 'GET', label: '/groups' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a paginated list of all your groups. By default, a maximum of ten groups are shown per page.
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="limit" type="integer">
+        Limit the number of groups returned.
+      </Property>
+      <Property name="page" type="integer">
+        Page of groups returned.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/groups">
+
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+    const token = 'YOUR_TOKEN';
+
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      params: {
+        limit: 8,
+        page: 1,
+      },
+    };
+
+    const response = await axios.get(`${apiUrl}/groups`, config);
+
+    console.log(response.data);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "status": "success",
+      "results": 8,
+      "page": 1,
+      "data": [
+        {
+          "_id": "l7cGNIBKZiNJ6wqF",
+          "name": "Group 1",
+          "admin": "b3I411PasOre2SmgA",
+          "member": [
+            "ah2e608bd60bb49f123",
+            "jrts214191241sga24a",
+            "2n7ts2141by141sga2B"
+          ],
+          "tagLocation": [
+            "Tag 1",
+            "Tag 2"
+          ],
+          "invitations": [
+            {
+              "invitedUser": "gasI411hrtsOre2SO4",
+              "status": "pending"
+            }
+          ]
+        },
+        {
+          "_id": "hSIhXBhNe8X1d8Et"
+          // ...
+        }
+      ]
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create a group {{ tag: 'POST', label: '/groups' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to create a new group.
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="name" type="string">
+        The name for the group.
+      </Property>
+      <Property name="admin" type="string">
+        Admin user ID for the group.
+      </Property>
+    </Properties>
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="tagLocation" type="array of strings">
+        An array of tag locations associated with the group.
+      </Property>
+      <Property name="member" type="array of strings">
+        An array of user IDs that are members of the group.
+      </Property>
+      <Property name="invitations" type="array of objects">
+        List invitations to the group
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/groups">
+
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+
+    const payload = {
+      name: "Group 1",
+      admin: "b3I411PasOre2SmgA"
+    }
+
+    const response = await axios.post(`${apiUrl}/groups`, payload);
+
+    console.log(response.data);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "status": "success",
+      "data": {
+        "_id": "l7cGNIBKZiNJ6wqF",
+        "name": "Group 1",
+        "admin": "b3I411PasOre2SmgA",
+        "member": [],
+        "tagLocation": [],
+        "invitations": [],
+      }
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Retrieve a group {{ tag: 'GET', label: '/groups/:id' }}
+
+<Row>
+  <Col>
+    This endpoint allows you to retrieve a group by providing the group id.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/groups/L7cGNIBKZiNJ6wqF">
+
+
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+
+    const id = 'L7cGNIBKZiNJ6wqF';
+
+    const response = await axios.get(`${apiUrl}/groups/${id}`);
+
+    console.log(response.data);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "status": "success",
+      "data": {
+        "_id": "l7cGNIBKZiNJ6wqF",
+        "name": "Group 1",
+        "admin": "b3I411PasOre2SmgA",
+        "member": [],
+        "tagLocation": [],
+        "invitations": [],
+      }
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Update a group {{ tag: 'PATCH', label: '/groups/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to perform an update on a group.
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="name" type="string">
+        The new name for the group.
+      </Property>
+      <Property name="member" type="array of strings">
+        - Member should contain an array of user IDs that are members of the group.
+        - New members provided in the request will be **added** to the group **IF** there is no user IDs in the list.
+        - Members provided in the request will **remove** member from the group **IF** there is existing user IDs in the list.
+      </Property>
+      <Property name="tagLocation" type="array of strings">
+        - TagLocation should contain an array of tag locations.
+        - New tagLocation provided in the request will be **added** to the group **IF** there is no tagLocation in the list.
+        - TagLocation provided in the request will **remove** tagLocation from the group **IF** there is existing tagLocation in the list.
+      </Property>
+      <Property name="invitations" type="array of objects">
+        - An array of invitation objects for updating the group's invitations.
+        - New invitations provided in the request will be **added** to the group **IF** there is no invitations.user in the list.
+        - Invitations provided in the request will **replace** the invitations.status from the group **IF** there is existing invitations.user in the list.
+
+      </Property>
+      <Property name="invitations.user" type="string">
+        User ID of the invited user.
+      </Property>
+      <Property name="invitations.status" type="string">
+        New status for the invitation (pending / accepted / declined).
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="PATCH" label="/groups/L7cGNIBKZiNJ6wqF">
+
+
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+
+    const id = 'L7cGNIBKZiNJ6wqF';
+
+    const payload = {
+      "name": "New Name"
+      "member": ['asfd21Af2dR1312'],
+      "tagLocation": ['Tag 1', 'Tag 2', 'Tag 3']
+    }
+
+    const response = await axios.patch(`${apiUrl}/groups/${id}`, payload);
+
+    console.log(response.data);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "status": "success",
+      "data": {
+        "_id": "l7cGNIBKZiNJ6wqF",
+        "name": "New Name",
+        "admin": "b3I411PasOre2SmgA",
+        "member": [
+          "93Ke9Pasg215Sads",
+          "asfd21Af2dR1312a"
+        ],
+        "tagLocation": [
+          "Tag 2",
+          "Tag 3"
+        ],
+        "invitations": [],
+      }
+    },
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Delete a group {{ tag: 'DELETE', label: '/groups/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to delete groups.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="DELETE" label="/groups/L7cGNIBKZiNJ6wqF">
+
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+
+    const id = 'L7cGNIBKZiNJ6wqF';
+
+    const response = await axios.delete(`${apiUrl}/groups/${id}`);
+
+    console.log(response.data);
+    ```
+    </CodeGroup>
+    ```json {{ title: 'Response' }}
+    // No response
+    ```
+
+  </Col>
+</Row>
