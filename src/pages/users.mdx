@@ -37,7 +37,80 @@ The user model includes information about users, such as their name, phone numbe
 
 ---
 
-## List all users {{ tag: 'GET', label: '/users' }}
+**Note:**
+All the endpoints described in this API are restricted to authenticated user only. To make requests to these endpoints, you must provide the appropriate authenticated user in the request headers.
+
+## Update Current User {{ tag: 'PATCH', label: '/users/updateMe' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to perform an update on current authenticated user. Currently, you can update `username`, `phone`, `photo`, `password` attribute on user.
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="username" type="string">
+        The username for the user.
+      </Property>
+      <Property name="phone" type="string">
+        The phone number for the user.
+      </Property>
+      <Property name="photo" type="string">
+        The photo URL for the user.
+      </Property>
+      <Property name="password" type="string">
+        The password for the user.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="PATCH" label="/users/updateMe">
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+    const token = 'YOUR_TOKEN';
+
+    const payload = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      username: "AlvonJovanus",
+      phone: "082323213123",
+    };
+
+    const response = await axios.patch(`${apiUrl}/users/updateMe`, payload);
+
+    console.log(response.data);
+    ```
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "status": "success",
+      "data": {
+        "_id": "652608bd60bb49fe10c7b719",
+        "username": "AlvonJovanus",
+        "email": "alvonj@gmail.com",
+        "phone": "082323213123",
+        "photo": null,
+        "role": "user",
+      }
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+**Note:**
+All the endpoints described belows are restricted to _admin_ access only. To make requests to these endpoints, you must provide the appropriate admin-level authorization in the request headers.
+
+## Get All Users {{ tag: 'GET', label: '/users' }}
 
 <Row>
   <Col>
@@ -112,83 +185,7 @@ The user model includes information about users, such as their name, phone numbe
 
 ---
 
-## Create a user {{ tag: 'POST', label: '/users' }}
-
-<Row>
-  <Col>
-
-    This endpoint allows you to add a new user to your user list in WhatsApp. To add a user, you must provide their WhatsApp name and phone number.
-
-    ### Required attributes
-
-    <Properties>
-      <Property name="email" type="string">
-        The email for the user.
-      </Property>
-      <Property name="username" type="string">
-        The username for the user.
-      </Property>
-      <Property name="phone" type="string">
-        The phone number for the user.
-      </Property>
-      <Property name="password" type="string">
-        The password for the user.
-      </Property>
-    </Properties>
-
-    ### Optional attributes
-
-    <Properties>
-      <Property name="photo" type="string">
-        The photo for the user.
-      </Property>
-    </Properties>
-
-  </Col>
-  <Col sticky>
-
-    <CodeGroup title="Request" tag="POST" label="/users">
-
-    ```js
-    import axios from 'axios'
-
-    const apiUrl = 'API_URL';
-
-    const payload = {
-      "username": "AlvonJ",
-      "email": "alvonj@gmail.com",
-      "phone": "08232321312",
-      "password": "12345678",
-    };
-
-
-    const response = await axios.post(`${apiUrl}/users`, payload);
-
-    console.log(response.data);
-    ```
-
-    </CodeGroup>
-
-    ```json {{ title: 'Response' }}
-    {
-      "status": "success",
-      "data": {
-        "_id": "652608bd60bb49fe10c7b719",
-        "username": "AlvonJ",
-        "email": "alvonj@gmail.com",
-        "phone": "08232321312",
-        "photo": null,
-        "role": "user",
-      }
-    }
-    ```
-
-  </Col>
-</Row>
-
----
-
-## Retrieve a user {{ tag: 'GET', label: '/users/:id' }}
+## Get One User {{ tag: 'GET', label: '/users/:id' }}
 
 <Row>
   <Col>
@@ -205,10 +202,18 @@ The user model includes information about users, such as their name, phone numbe
     import axios from 'axios'
 
     const apiUrl = 'API_URL';
+    const token = 'YOUR_TOKEN';
 
     const id = '652608bd60bb49fe10c7b719';
 
-    const response = await axios.get(`${apiUrl}/users/${id}`);
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    };
+
+
+    const response = await axios.get(`${apiUrl}/users/${id}`, config);
 
     console.log(response.data);
     ```
@@ -234,7 +239,7 @@ The user model includes information about users, such as their name, phone numbe
 
 ---
 
-## Update a user {{ tag: 'PATCH', label: '/users/:id' }}
+## Update One User {{ tag: 'PATCH', label: '/users/:id' }}
 
 <Row>
   <Col>
@@ -266,12 +271,16 @@ The user model includes information about users, such as their name, phone numbe
     import axios from 'axios'
 
     const apiUrl = 'API_URL';
+    const token = 'YOUR_TOKEN';
 
     const id = '652608bd60bb49fe10c7b719'
 
     const payload = {
-      "username": "AlvonJovanus",
-      "phone": "082323213123",
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      username: "AlvonJovanus",
+      phone: "082323213123",
     };
 
     const response = await axios.patch(`${apiUrl}/users/${id}`, payload);
@@ -299,7 +308,7 @@ The user model includes information about users, such as their name, phone numbe
 
 ---
 
-## Delete a user {{ tag: 'DELETE', label: '/users/:id' }}
+## Delete One User {{ tag: 'DELETE', label: '/users/:id' }}
 
 <Row>
   <Col>
@@ -314,10 +323,17 @@ The user model includes information about users, such as their name, phone numbe
     import axios from 'axios'
 
     const apiUrl = 'API_URL';
+    const token = 'YOUR_TOKEN';
 
     const id = 'WAz8eIbvDR60rouK';
 
-    const response = await axios.delete(`${apiUrl}/users/${id}`);
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    };
+
+    const response = await axios.delete(`${apiUrl}/users/${id}`, config);
 
     console.log(response.data);
     ```

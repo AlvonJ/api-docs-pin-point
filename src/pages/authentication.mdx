@@ -3,39 +3,192 @@ export const description =
 
 # Authentication
 
-You'll need to authenticate your requests to access any of the endpoints in the Protocol API. In this guide, we'll look at how authentication works. Protocol offers two ways to authenticate your API requests: Basic authentication and OAuth2 with a token — OAuth2 is the recommended way. {{ className: 'lead' }}
-
-## Basic authentication
-
-With basic authentication, you use your username and password to authenticate your HTTP requests. Unless you have a very good reason, you probably shouldn't use basic auth. Here's how to authenticate using cURL:
-
-```bash {{ title: 'Example request with basic auth' }}
-curl https://api.protocol.chat/conversations \
-  -u username:password
-```
-
-Please don't commit your Protocol password to GitHub!
+You'll need to authenticate your requests to access any of the endpoints in the Pin-Point API. In this guide, we'll look at how authentication works. Protocol offers two ways to authenticate your API requests: Basic authentication and OAuth2 with a token — OAuth2 is the recommended way. {{ className: 'lead' }}
 
 ## OAuth2 with bearer token
 
-The recommended way to authenticate with the Protocol API is by using OAuth2. When establishing a connection using OAuth2, you will need your access token — you will find it in the [Protocol dashboard](#) under API settings. Here's how to add the token to the request header using cURL:
+The recommended way to authenticate with the Protocol API is by using OAuth2. When establishing a connection using OAuth2, you will need your access token. Here's how to add the token to the request header using axios:
 
-```bash {{ title: 'Example request with bearer token' }}
-curl https://api.protocol.chat/conversations \
-  -H "Authorization: Bearer {token}"
-```
+---
 
-Always keep your token safe and reset it if you suspect it has been compromised.
+## Register {{ tag: 'POST', label: '/users/register' }}
 
-## Using an SDK
+<Row>
+  <Col>
 
-If you use one of our official SDKs, you won't have to worry about any of the above — fetch your access token from the [Protocol dashboard](#) under API settings, and the client library will take care of the rest. All the client libraries use OAuth2 behind the scenes.
+    You can register by sending POST request to /users/register and fill in the payload object to the request body.
 
-<div className="not-prose">
-  <Button
-    href="/sdks"
-    variant="text"
-    arrow="right"
-    children="Check out our list of first-party SDKs"
-  />
-</div>
+    Token will also be send to cookie (jwt). Always keep your token safe and reset it if you suspect it has been compromised.
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="email" type="string">
+        The email for the user.
+      </Property>
+      <Property name="username" type="string">
+        The username for the user.
+      </Property>
+      <Property name="phone" type="string">
+        The phone number for the user.
+      </Property>
+      <Property name="password" type="string">
+        The password for the user.
+      </Property>
+    </Properties>
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="photo" type="string">
+        The photo for the user.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/users/register">
+
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+    const token = 'YOUR_TOKEN';
+
+    const payload = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      "email": "test@gmail.com",
+      "username": "Test 1",
+      "password": "12345678",
+      "phone": "0813232323"
+    };
+
+    const response = await axios.post(`${apiUrl}/users/register`, payload);
+
+    console.log(response.data);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "status": "success",
+      "token": "NEW_TOKEN",
+      "data": {
+        "user": {
+          "_id": "65379fa684ac25b8667c49d5",
+          "username": "Test 1",
+          "email": "test@gmail.com",
+          "phone": "0813232323",
+          "photo": null,
+          "role": "user"
+        }
+      }
+    }
+    ```
+
+  </Col>
+
+</Row>
+
+---
+
+## Login {{ tag: 'POST', label: '/users/login' }}
+
+<Row>
+  <Col>
+    You can login user by sending POST request to /users/login and fill in the payload object to the request body.
+
+    Token will also be send to cookie (jwt).
+
+    ### Required attributes
+
+    <Properties>
+      <Property name="email" type="string">
+        The email for the user.
+      </Property>
+      <Property name="password" type="string">
+        The password for the user.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/users/register">
+
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+
+    const payload = {
+      "email": "test1@gmail.com",
+      "password": "12345678"
+    };
+
+    const response = await axios.post(`${apiUrl}/users/login`, payload);
+
+    console.log(response.data);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "status": "success",
+      "token": "NEW_TOKEN",
+      "data": {
+        "user": {
+          "_id": "6536355ee6c5ec4815884c6b",
+          "username": "updated username",
+          "email": "test1@gmail.com",
+          "phone": "123213121",
+          "photo": null,
+          "role": "user"
+        }
+      }
+    }
+    ```
+
+  </Col>
+
+</Row>
+
+---
+
+## Logout {{ tag: 'GET', label: '/users/logout' }}
+
+<Row>
+  <Col>
+    You can logout user by sending GET request to /users/logout.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/users/logout">
+
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+
+    const response = await axios.get(`${apiUrl}/users/logout`);
+
+    console.log(response.data);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "status": "success"
+    }
+    ```
+
+  </Col>
+
+</Row>

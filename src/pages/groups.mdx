@@ -36,11 +36,201 @@ The group model contains essential information about your groups, including grou
   <Property name="invitations.status" type="string">
     Status of invitation (pending / accepted / declined)
   </Property>
+  <Property name="invitations.message" type="string">
+    *Optional* message of invitation
+  </Property>
 </Properties>
 
 ---
 
-## List all groups {{ tag: 'GET', label: '/groups' }}
+**Note:**
+All the endpoints described in this API are restricted to authenticated user only. To make requests to these endpoints, you must provide the appropriate authenticated user in the request headers.
+
+## Get Groups that Invited Current User {{ tag: 'GET', label: '/groups/invitations/getMe' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to retrieve a paginated list of all groups that invited current user.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/groups">
+
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+    const token = 'YOUR_TOKEN';
+
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    };
+
+    const response = await axios.get(`${apiUrl}/groups/invitations/getMe`, config);
+
+    console.log(response.data);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "status": "success",
+      "results": 2,
+      "data": [
+        {
+          "_id": "65363446a571d848388fc7a0",
+          "name": "test group",
+          "member": ["adsa21321"],
+          "admin": "65360aba5619783aaff5f909",
+          "tagLocation": [
+            "tag 1"
+          ],
+          "invitations": [
+            {
+              "user": "adsa21321",
+              "status": "accepted"
+            },
+            {
+              "user": "65379fa684ac25b8667c49d5",
+              "status": "pending"
+            }
+          ]
+        },
+        {
+          "_id": "6537b20248193973eb613a63",
+          "name": "test group 2",
+          "member": ["adsa21320"],
+          "admin": "65360aba5619783aaff5f909",
+          "tagLocation": [],
+          "invitations": [
+            {
+              "user": "adsa21320",
+              "status": "accepted"
+            },
+            {
+              "user": "65379fa684ac25b8667c49d5",
+              "status": "pending"
+            }
+          ]
+        }
+      ]
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Update One Group {{ tag: 'PATCH', label: '/groups/:id' }}
+
+<Row>
+  <Col>
+
+    This endpoint allows you to perform an update on a group. \
+
+    **Note:** \
+    Name and member attribute can only be updated by *admin*. \
+    *User* can update his invitations and tagLocation.
+
+    ### Optional attributes
+
+    <Properties>
+      <Property name="name" type="string">
+        The new name for the group.
+      </Property>
+      <Property name="member" type="array of strings">
+        - Member should contain an array of user IDs that are members of the group.
+        - New members provided in the request will be **added** to the group **IF** there is no user IDs in the list.
+        - Members provided in the request will **remove** member from the group **IF** there is existing user IDs in the list.
+      </Property>
+
+      <Property name="tagLocation" type="array of strings">
+        - TagLocation should contain an array of tag locations.
+        - New tagLocation provided in the request will be **added** to the group **IF** there is no tagLocation in the list.
+        - TagLocation provided in the request will **remove** tagLocation from the group **IF** there is existing tagLocation in the list.
+      </Property>
+      <Property name="invitations" type="array of objects">
+        - An array of invitation objects for updating the group's invitations.
+        - New invitations provided in the request will be **added** to the group **IF** there is no invitations.user in the list.
+        - Invitations provided in the request will **replace** the invitations.status from the group **IF** there is existing invitations.user in the list.
+      </Property>
+      <Property name="invitations.user" type="string">
+        User ID of the invited user.
+      </Property>
+      <Property name="invitations.status" type="string">
+        New status for the invitation (pending / accepted / declined).
+      </Property>
+      <Property name="invitations.message" type="string">
+        *Optional* message of invitation
+      </Property>
+
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="PATCH" label="/groups/L7cGNIBKZiNJ6wqF">
+
+
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+    const token = 'YOUR_TOKEN';
+
+    const id = 'L7cGNIBKZiNJ6wqF';
+
+    const payload = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+      "name": "New Name"
+      "member": ['asfd21Af2dR1312'],
+      "tagLocation": ['Tag 1', 'Tag 2', 'Tag 3']
+    }
+
+    const response = await axios.patch(`${apiUrl}/groups/${id}`, payload);
+
+    console.log(response.data);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "status": "success",
+      "data": {
+        "_id": "l7cGNIBKZiNJ6wqF",
+        "name": "New Name",
+        "admin": "b3I411PasOre2SmgA",
+        "member": [
+          "93Ke9Pasg215Sads",
+          "asfd21Af2dR1312a"
+        ],
+        "tagLocation": [
+          "Tag 2",
+          "Tag 3"
+        ],
+        "invitations": [],
+      }
+    },
+    ```
+
+  </Col>
+</Row>
+
+---
+
+**Note:**
+All the endpoints described belows are restricted to _admin_ access only. To make requests to these endpoints, you must provide the appropriate admin-level authorization in the request headers.
+
+## Get All Groups {{ tag: 'GET', label: '/groups' }}
 
 <Row>
   <Col>
@@ -109,7 +299,12 @@ The group model contains essential information about your groups, including grou
             {
               "invitedUser": "gasI411hrtsOre2SO4",
               "status": "pending"
-            }
+            },
+            {
+              "invitedUser": "23fs1hrtsOreoi7SB",
+              "status": "rejected",
+              "message": "I don't want to join"
+            },
           ]
         },
         {
@@ -125,7 +320,7 @@ The group model contains essential information about your groups, including grou
 
 ---
 
-## Create a group {{ tag: 'POST', label: '/groups' }}
+## Create One Group {{ tag: 'POST', label: '/groups' }}
 
 <Row>
   <Col>
@@ -166,8 +361,12 @@ The group model contains essential information about your groups, including grou
     import axios from 'axios'
 
     const apiUrl = 'API_URL';
+    const token = 'YOUR_TOKEN';
 
     const payload = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
       name: "Group 1",
       admin: "b3I411PasOre2SmgA"
     }
@@ -198,7 +397,7 @@ The group model contains essential information about your groups, including grou
 
 ---
 
-## Retrieve a group {{ tag: 'GET', label: '/groups/:id' }}
+## Get One Group {{ tag: 'GET', label: '/groups/:id' }}
 
 <Row>
   <Col>
@@ -213,10 +412,17 @@ The group model contains essential information about your groups, including grou
     import axios from 'axios'
 
     const apiUrl = 'API_URL';
+    const token = 'YOUR_TOKEN';
 
     const id = 'L7cGNIBKZiNJ6wqF';
 
-    const response = await axios.get(`${apiUrl}/groups/${id}`);
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    }
+
+    const response = await axios.get(`${apiUrl}/groups/${id}`, config);
 
     console.log(response.data);
     ```
@@ -242,95 +448,7 @@ The group model contains essential information about your groups, including grou
 
 ---
 
-## Update a group {{ tag: 'PATCH', label: '/groups/:id' }}
-
-<Row>
-  <Col>
-
-    This endpoint allows you to perform an update on a group.
-
-    ### Optional attributes
-
-    <Properties>
-      <Property name="name" type="string">
-        The new name for the group.
-      </Property>
-      <Property name="member" type="array of strings">
-        - Member should contain an array of user IDs that are members of the group.
-        - New members provided in the request will be **added** to the group **IF** there is no user IDs in the list.
-        - Members provided in the request will **remove** member from the group **IF** there is existing user IDs in the list.
-      </Property>
-      <Property name="tagLocation" type="array of strings">
-        - TagLocation should contain an array of tag locations.
-        - New tagLocation provided in the request will be **added** to the group **IF** there is no tagLocation in the list.
-        - TagLocation provided in the request will **remove** tagLocation from the group **IF** there is existing tagLocation in the list.
-      </Property>
-      <Property name="invitations" type="array of objects">
-        - An array of invitation objects for updating the group's invitations.
-        - New invitations provided in the request will be **added** to the group **IF** there is no invitations.user in the list.
-        - Invitations provided in the request will **replace** the invitations.status from the group **IF** there is existing invitations.user in the list.
-
-      </Property>
-      <Property name="invitations.user" type="string">
-        User ID of the invited user.
-      </Property>
-      <Property name="invitations.status" type="string">
-        New status for the invitation (pending / accepted / declined).
-      </Property>
-    </Properties>
-
-  </Col>
-  <Col sticky>
-
-    <CodeGroup title="Request" tag="PATCH" label="/groups/L7cGNIBKZiNJ6wqF">
-
-
-    ```js
-    import axios from 'axios'
-
-    const apiUrl = 'API_URL';
-
-    const id = 'L7cGNIBKZiNJ6wqF';
-
-    const payload = {
-      "name": "New Name"
-      "member": ['asfd21Af2dR1312'],
-      "tagLocation": ['Tag 1', 'Tag 2', 'Tag 3']
-    }
-
-    const response = await axios.patch(`${apiUrl}/groups/${id}`, payload);
-
-    console.log(response.data);
-    ```
-
-    </CodeGroup>
-
-    ```json {{ title: 'Response' }}
-    {
-      "status": "success",
-      "data": {
-        "_id": "l7cGNIBKZiNJ6wqF",
-        "name": "New Name",
-        "admin": "b3I411PasOre2SmgA",
-        "member": [
-          "93Ke9Pasg215Sads",
-          "asfd21Af2dR1312a"
-        ],
-        "tagLocation": [
-          "Tag 2",
-          "Tag 3"
-        ],
-        "invitations": [],
-      }
-    },
-    ```
-
-  </Col>
-</Row>
-
----
-
-## Delete a group {{ tag: 'DELETE', label: '/groups/:id' }}
+## Delete One Group {{ tag: 'DELETE', label: '/groups/:id' }}
 
 <Row>
   <Col>
@@ -346,10 +464,17 @@ The group model contains essential information about your groups, including grou
     import axios from 'axios'
 
     const apiUrl = 'API_URL';
+    const token = 'YOUR_TOKEN';
 
     const id = 'L7cGNIBKZiNJ6wqF';
 
-    const response = await axios.delete(`${apiUrl}/groups/${id}`);
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    }
+
+    const response = await axios.delete(`${apiUrl}/groups/${id}`, config);
 
     console.log(response.data);
     ```
