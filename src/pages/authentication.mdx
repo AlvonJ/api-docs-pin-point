@@ -192,3 +192,60 @@ The recommended way to authenticate with the Protocol API is by using OAuth2. Wh
   </Col>
 
 </Row>
+
+---
+
+**Note:**
+`Update current user password endpoint is restricted to authenticated user only. To make requests to these endpoints, you must provide the appropriate authenticated user in the request headers.`
+
+## Update Current User Password {{ tag: 'PATCH', label: '/users/updateMyPassword' }}
+
+<Row>
+  <Col>
+    You can update current user password by sending PATCH request to /users/updateMyPassword.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="PATCH" label="/users/updateMyPassword">
+
+    ```js
+    import axios from 'axios'
+
+    const apiUrl = 'API_URL';
+
+    const payload = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      "passwordCurrent": "123456",
+      "passwordNew": "12345678"
+    }
+
+    const response = await axios.patch(`${apiUrl}/users/updateMyPassword`, payload);
+
+    console.log(response.data);
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "status": "success",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1Mzc3YjAzYWY4ZjRjOGEyYzU1NDM4MCIsImlhdCI6MTY5ODI5NTA1MSwiZXhwIjoxNzAwODg3MDUxfQ.h6er1RIczQ4-rPCInOW_-PcebIdLea2JwuZvRhZOHvA",
+      "data": {
+        "user": {
+          "_id": "65377b03af8f4c8a2c554380",
+          "username": "user",
+          "email": "user@gmail.com",
+          "phone": "0813232323",
+          "photo": null,
+          "role": "user"
+        }
+      }
+    }
+    ```
+
+  </Col>
+
+</Row>

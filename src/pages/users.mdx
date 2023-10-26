@@ -31,21 +31,21 @@ The user model includes information about users, such as their name, phone numbe
     The photo for the user.
   </Property>
   <Property name="role" type="string">
-    The role for the user.
+    The role for the user (user / admin).
   </Property>
 </Properties>
 
 ---
 
 **Note:**
-All the endpoints described in this API are restricted to authenticated user only. To make requests to these endpoints, you must provide the appropriate authenticated user in the request headers.
+`All the endpoints described in this API are restricted to authenticated user only. To make requests to these endpoints, you must provide the appropriate authenticated user in the request headers.`
 
 ## Update Current User {{ tag: 'PATCH', label: '/users/updateMe' }}
 
 <Row>
   <Col>
 
-    This endpoint allows you to perform an update on current authenticated user. Currently, you can update `username`, `phone`, `photo`, `password` attribute on user.
+    This endpoint allows you to perform an update on current authenticated user. Currently, you can update `username`, `phone`, and `photo` attribute on user.
 
     ### Optional attributes
 
@@ -58,9 +58,6 @@ All the endpoints described in this API are restricted to authenticated user onl
       </Property>
       <Property name="photo" type="string">
         The photo URL for the user.
-      </Property>
-      <Property name="password" type="string">
-        The password for the user.
       </Property>
     </Properties>
 
@@ -108,7 +105,7 @@ All the endpoints described in this API are restricted to authenticated user onl
 ---
 
 **Note:**
-All the endpoints described belows are restricted to _admin_ access only. To make requests to these endpoints, you must provide the appropriate admin-level authorization in the request headers.
+`All the endpoints described belows are restricted to admin access only. To make requests to these endpoints, you must provide the appropriate admin-level authorization in the request headers.`
 
 ## Get All Users {{ tag: 'GET', label: '/users' }}
 

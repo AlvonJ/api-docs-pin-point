@@ -44,7 +44,7 @@ The group model contains essential information about your groups, including grou
 ---
 
 **Note:**
-All the endpoints described in this API are restricted to authenticated user only. To make requests to these endpoints, you must provide the appropriate authenticated user in the request headers.
+`All the endpoints described in this API are restricted to authenticated user only. To make requests to these endpoints, you must provide the appropriate authenticated user in the request headers.`
 
 ## Get Groups that Invited Current User {{ tag: 'GET', label: '/groups/invitations/getMe' }}
 
@@ -135,8 +135,8 @@ All the endpoints described in this API are restricted to authenticated user onl
     This endpoint allows you to perform an update on a group. \
 
     **Note:** \
-    Name and member attribute can only be updated by *admin*. \
-    *User* can update his invitations and tagLocation.
+    `Name and member group can only be updated by admin.` \
+    `User can update his invitations and tagLocation.`
 
     ### Optional attributes
 
@@ -158,7 +158,7 @@ All the endpoints described in this API are restricted to authenticated user onl
       <Property name="invitations" type="array of objects">
         - An array of invitation objects for updating the group's invitations.
         - New invitations provided in the request will be **added** to the group **IF** there is no invitations.user in the list.
-        - Invitations provided in the request will **replace** the invitations.status from the group **IF** there is existing invitations.user in the list.
+        - Invitations provided in the request will **replace** the invitations from the group **IF** there is existing invitations.user in the list.
       </Property>
       <Property name="invitations.user" type="string">
         User ID of the invited user.
@@ -192,7 +192,13 @@ All the endpoints described in this API are restricted to authenticated user onl
       }
       "name": "New Name"
       "member": ['asfd21Af2dR1312'],
-      "tagLocation": ['Tag 1', 'Tag 2', 'Tag 3']
+      "tagLocation": ['Tag 1', 'Tag 2', 'Tag 3'],
+      "invitations": [
+        {
+          "user": "65379fa684ac25b8667c49d5",
+          "status": "pending"
+        }
+      ]
     }
 
     const response = await axios.patch(`${apiUrl}/groups/${id}`, payload);
@@ -217,7 +223,12 @@ All the endpoints described in this API are restricted to authenticated user onl
           "Tag 2",
           "Tag 3"
         ],
-        "invitations": [],
+        "invitations": [
+          {
+            "user": "65379fa684ac25b8667c49d5",
+            "status": "pending"
+          }
+        ],
       }
     },
     ```
@@ -228,7 +239,7 @@ All the endpoints described in this API are restricted to authenticated user onl
 ---
 
 **Note:**
-All the endpoints described belows are restricted to _admin_ access only. To make requests to these endpoints, you must provide the appropriate admin-level authorization in the request headers.
+`All the endpoints described belows are restricted to admin access only. To make requests to these endpoints, you must provide the appropriate admin-level authorization in the request headers.`
 
 ## Get All Groups {{ tag: 'GET', label: '/groups' }}
 
