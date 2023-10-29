@@ -56,7 +56,7 @@ The group model contains essential information about your groups, including grou
   </Col>
   <Col sticky>
 
-    <CodeGroup title="Request" tag="GET" label="/groups">
+    <CodeGroup title="Request" tag="GET" label="/groups/invitations/getMe">
 
     ```js
     import axios from 'axios'
@@ -195,6 +195,10 @@ The group model contains essential information about your groups, including grou
       "tagLocation": ['Tag 1', 'Tag 2', 'Tag 3'],
       "invitations": [
         {
+          "user": "asfd21Af2dR1312",
+          "status": "accepted"
+        },
+        {
           "user": "65379fa684ac25b8667c49d5",
           "status": "pending"
         }
@@ -224,6 +228,10 @@ The group model contains essential information about your groups, including grou
           "Tag 3"
         ],
         "invitations": [
+          {
+            "user": "asfd21Af2dR1312",
+            "status": "accepted"
+          },
           {
             "user": "65379fa684ac25b8667c49d5",
             "status": "pending"
@@ -307,6 +315,18 @@ The group model contains essential information about your groups, including grou
             "Tag 2"
           ],
           "invitations": [
+            {
+              "user": "ah2e608bd60bb49f123",
+              "status": "accepted"
+            },
+            {
+              "user": "jrts214191241sga24a",
+              "status": "accepted"
+            },
+            {
+              "user": "2n7ts2141by141sga2B",
+              "status": "accepted"
+            },
             {
               "user": "gasI411hrtsOre2SO4",
               "status": "pending"

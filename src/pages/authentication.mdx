@@ -57,9 +57,6 @@ The recommended way to authenticate with the Protocol API is by using OAuth2. Wh
     const token = 'YOUR_TOKEN';
 
     const payload = {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
       "email": "test@gmail.com",
       "username": "Test 1",
       "password": "12345678",
@@ -118,7 +115,7 @@ The recommended way to authenticate with the Protocol API is by using OAuth2. Wh
   </Col>
   <Col sticky>
 
-    <CodeGroup title="Request" tag="POST" label="/users/register">
+    <CodeGroup title="Request" tag="POST" label="/users/login">
 
     ```js
     import axios from 'axios'
